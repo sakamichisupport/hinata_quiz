@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>日向坂46クイズ</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div id="app" class="container py-5">
+  <template v-if="!quizStarted" >
+    <h1 class="text-center">日向坂46に関するクイズです</h1>
+    <h2 class="text-center">ぜひ挑戦してみてください。</h2>
+    <div class="d-grid gap-2 col-6 mx-auto">
+      <button class="btn btn-primary" @click="startQuiz">スタート！</button>
+    </div>
+  </template>
+  <template v-else-if="!quizFinished">
+    <h2 class="mb-4">{{ currentQuestion.id }}.{{ currentQuestion.question }}</h2>
+    <div class="btn-group d-grid gap-3">
+      <button v-for="(option, index) in currentQuestion.options" :key="index" class="btn btn-outline-primary" @click="answerQuestion(option)">
+        {{ option }}
+      </button>
+    </div>
+  </template>
+  <template v-else>
+    <h2 class="mb-4">クイズ結果</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>問題</th>
+          <th>正解</th>
+          <th>回答</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(question, index) in questions" :key="index">
+          <td>{{ question.question }}</td>
+          <td>{{ question.answer }}</td>
+          <td v-if="userAnswers[index] === question.answer">&#x2713;</td>
+          <td v-else>&#x2717;</td>
+        </tr>
+      </tbody>
+    </table>
+    <p v-if="correctAnswers >= 8" class="text-primary display-2">あなたは上級おひさま！</p>
+    <p v-else-if="correctAnswers >= 5 && correctAnswers <= 7" class="text-primary display-2">あなたはなかなかのおひさま！</p>
+    <p v-else="correctAnswers <= 4" class="text-danger display-2">もう少し頑張りましょう</p>
+    <!-- <p v-else class="text-danger display-2">もう少し頑張りましょう・・・</p> -->
+    <p>{{ correctAnswers }}/10 問正解</p>
+    <button class="btn btn-primary" @click="restartQuiz">スタート画面へもどる</button>
+  </template>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue@3.2.19/dist/vue.global.prod.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
